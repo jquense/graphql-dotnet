@@ -1,70 +1,125 @@
 ﻿using System;
 using GraphQL.Types;
+using GraphQL.Resolvers;
+using System.Linq.Expressions;
 
 namespace GraphQL.Builders
 {
     public static class FieldBuilder
     {
-        public static FieldBuilder<TGraphType, TSourceType, object> Create<TGraphType, TSourceType>()
-            where TGraphType : GraphType
+        public static FieldBuilder<TSourceType, TReturnType> Create<TSourceType, TReturnType>(Type type = null)
         {
-            return FieldBuilder<TGraphType, TSourceType, object>.Create();
+            return FieldBuilder<TSourceType, TReturnType>.Create(type);
         }
     }
 
-    public class FieldBuilder<TGraphType, TSourceType, TReturnType>
-        where TGraphType : GraphType
+    public class FieldBuilder<TSourceType, TReturnType>
     {
 
-        public FieldType FieldType { get; protected set; }
+        private FieldType _fieldType { get; set; }
+
+        public FieldType FieldType => _fieldType;
 
         private FieldBuilder(FieldType fieldType)
         {
-            FieldType = fieldType;
+            _fieldType = fieldType;
         }
 
-        public static FieldBuilder<TGraphType, TSourceType, TReturnType> Create()
+        public static FieldBuilder<TSourceType, TReturnType> Create(Type type = null)
         {
             var fieldType = new FieldType
             {
-                Type = typeof(TGraphType),
+                Type = type,
                 Arguments = new QueryArguments(),
             };
-            return new FieldBuilder<TGraphType, TSourceType, TReturnType>(fieldType);
+            return new FieldBuilder<TSourceType, TReturnType>(fieldType);
         }
 
-        public FieldBuilder<TGraphType, TSourceType, TReturnType> Name(string name)
+        public FieldBuilder<TSourceType, TReturnType> Name(string name)
         {
-            FieldType.Name = name;
+            _fieldType.Name = name;
             return this;
         }
 
-        public FieldBuilder<TGraphType, TSourceType, TReturnType> Description(string description)
+        public FieldBuilder<TSourceType, TReturnType> Description(string description)
         {
-            FieldType.Description = description;
+            _fieldType.Description = description;
             return this;
         }
 
-        public FieldBuilder<TGraphType, TSourceType, TReturnType> DeprecationReason(string deprecationReason)
+        public FieldBuilder<TSourceType, TReturnType> DeprecationReason(string deprecationReason)
         {
-            FieldType.DeprecationReason = deprecationReason;
+            _fieldType.DeprecationReason = deprecationReason;
             return this;
         }
 
-        public FieldBuilder<TGraphType, TSourceType, TReturnType> DefaultValue(TReturnType defaultValue = default(TReturnType))
+        public FieldBuilder<TSourceType, TReturnType> DefaultValue(TReturnType defaultValue = default(TReturnType))
         {
-            FieldType.DefaultValue = defaultValue;
+            _fieldType.DefaultValue = defaultValue;
             return this;
         }
 
-        public FieldBuilder<TGraphType, TSourceType, TNewReturnType> Returns<TNewReturnType>()
+        public FieldBuilder<TSourceType, TReturnType> Type(Type type)
         {
-            return new FieldBuilder<TGraphType, TSourceType, TNewReturnType>(FieldType);
+            _fieldType.Type = type;
+            return this;
         }
 
-        public FieldBuilder<TGraphType, TSourceType, TReturnType> Argument<TArgumentGraphType>(string name, string description)
+        public FieldBuilder<TSourceType, TReturnType> Type<TGraphType>() where TGraphType : IGraphType
         {
-            FieldType.Arguments.Add(new QueryArgument(typeof(TArgumentGraphType))
+            return Type(typeof (TGraphType));
+        }
+
+        public FieldBuilder<TSourceType, TReturnType> For(Func<ResolveFieldContext<TSourceType>, TReturnType> resolve)
+        {
+            _fieldType.Type = _fieldType.Type ?? typeof(TReturnType).GetGraphTypeFromType();
+            _fieldType.Resolver = new FuncFieldResolver<TSourceType, TReturnType>(resolve);
+
+            return this;
+        }
+
+        public FieldBuilder<TSourceType, TNewType> For<TNewType>(Func<ResolveFieldContext<TSourceType>, TNewType> resolve)
+        {
+            return new FieldBuilder<TSourceType, TNewType>(_fieldType).For(resolve);
+        }
+
+
+
+
+        public FieldBuilder<TSourceType, TReturnType> For(Expression<Func<TSourceType, TReturnType>> resolve)
+        {
+            _fieldType.Type = _fieldType.Type ?? typeof(TReturnType).GetGraphTypeFromType();
+            _fieldType.Name = resolve.NameOf().ToCamelCase();
+            _fieldType.Resolver = new ExpressionFieldResolver<TSourceType, TReturnType>(resolve);
+
+            return this;
+        }
+
+        public FieldBuilder<TSourceType, TNewType> For<TNewType>(Expression<Func<TSourceType, TNewType>> resolve)
+        {
+            return new FieldBuilder<TSourceType, TNewType>(_fieldType).For(resolve);
+        }
+
+
+        public FieldBuilder<TSourceType, TReturnType> Resolve(IFieldResolver resolver)
+        {
+            _fieldType.Resolver = resolver;
+            return this;
+        }
+
+        public FieldBuilder<TSourceType, TReturnType> Resolve(Func<ResolveFieldContext<TSourceType>, TReturnType> resolve)
+        {
+            return Resolve(new FuncFieldResolver<TSourceType, TReturnType>(resolve));
+        }
+
+        public FieldBuilder<TSourceType, TNewReturnType> Returns<TNewReturnType>()
+        {
+            return new FieldBuilder<TSourceType, TNewReturnType>(FieldType);
+        }
+
+        public FieldBuilder<TSourceType, TReturnType> Argument<TArgumentGraphType>(string name, string description)
+        {
+            _fieldType.Arguments.Add(new QueryArgument(typeof(TArgumentGraphType))
             {
                 Name = name,
                 Description = description,
@@ -72,21 +127,16 @@ namespace GraphQL.Builders
             return this;
         }
 
-        public FieldBuilder<TGraphType, TSourceType, TReturnType> Argument<TArgumentGraphType, TArgumentType>(string name, string description,
+        public FieldBuilder<TSourceType, TReturnType> Argument<TArgumentGraphType, TArgumentType>(string name, string description,
             TArgumentType defaultValue = default(TArgumentType))
         {
-            FieldType.Arguments.Add(new QueryArgument(typeof(TArgumentGraphType))
+            _fieldType.Arguments.Add(new QueryArgument(typeof(TArgumentGraphType))
             {
                 Name = name,
                 Description = description,
                 DefaultValue = defaultValue,
             });
             return this;
-        }
-
-        public void Resolve(Func<ResolveFieldContext<TSourceType>, TReturnType> resolver)
-        {
-            FieldType.Resolve = context => resolver(new ResolveFieldContext<TSourceType>(context));
         }
     }
 }
