@@ -12,12 +12,12 @@ namespace GraphQL.Next.Configs
         IEnumerable<GraphQLFieldDefinition> Fields { get; }
     }
 
-    public class GraphQLInterfaceTypeConfig : GraphQLTypeFieldConfig, IGraphQLInterfaceTypeConfig
+    public class GraphQLInterfaceTypeConfig : GraphQLComplexTypeConfig, IGraphQLInterfaceTypeConfig
     {
         public Func<object, GraphQLType> ResolveType { get; set; }
     }
 
-    public class GraphQLInterfaceTypeConfig<TModel> : GraphQLTypeFieldConfig<TModel>, IGraphQLInterfaceTypeConfig
+    public class GraphQLInterfaceTypeConfig<TModel> : GraphQLComplexTypeConfig<TModel>, IGraphQLInterfaceTypeConfig
     {
         public Func<object, GraphQLType> ResolveType { get; set; }
     }

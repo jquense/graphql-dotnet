@@ -7,11 +7,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GraphQL.Next.Configs
-{
-    public interface IGraphQLFieldConfig
+{   
+    public interface IGraphQLTypeConfig
     {
         string Name { get; set; }
-        string Description { get; set; 
+        string Description { get; set; }
         string DeprecationReason { get; set; }
+    }
+
+    public class GraphQLTypeConfig : IGraphQLTypeConfig
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string DeprecationReason { get; set; }
     }
 }

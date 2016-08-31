@@ -46,16 +46,15 @@ namespace GraphQL.StarWars
                 _.Field("appearsIn", new GraphQLList(episodeEnum));
             });
 
-            var droidType = GraphQLObjectType<Droid>.For(_ =>
-            {
-                _.Field(x => x.Name);
-                _.Field(
+            var droidType = GraphQLObjectType<Droid>.For(_ => _.
+                .Field(x => x.Name)
+                .Field(
                     name: "friends",
                     type: new GraphQLList(characterType),
-                    resolve: context => data.FriendsFor(context.Source));
-                _.Interface(characterType);
-                _.IsOfType = value => value is Droid;
-            });
+                    resolve: context => data.FriendsFor(context.Source))
+                .Interface(characterType)
+                .IsOfType(value => value is Droid);
+            );
 
             var humanType = GraphQLObjectType<Human>.For(_ =>
             {

@@ -13,6 +13,8 @@ namespace GraphQL.Next
 
         public static IGraphQLType GetGraphQLTypeFromType(this Type type)
         {
+            // TODO: infer nullable 
+
             if (type == typeof(int))
             {
                 return GraphQLScalarTypes.GraphQLInt;
@@ -37,6 +39,7 @@ namespace GraphQL.Next
             {
                 return GraphQLScalarTypes.GraphQLBoolean;
             }
+
 
             throw new ArgumentOutOfRangeException(nameof(type), "Unknown input type.");
         }

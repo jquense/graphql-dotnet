@@ -7,15 +7,10 @@ using System.Threading.Tasks;
 
 namespace GraphQL.Next.Configs
 {
-    public class GraphQLObjectTypeConfigBase
-    {
-    }
-
-    public class GraphQLObjectTypeConfig : GraphQLTypeFieldConfig, IGraphQLObjectTypeConfig
+    public class GraphQLObjectTypeConfig : GraphQLComplexTypeConfig, IGraphQLObjectTypeConfig
     {
         private readonly List<GraphQLInterfaceType> _interfaces = new List<GraphQLInterfaceType>();
 
-        public string DeprecationReason { get; set; }
         public Func<object, bool> IsOfType { get; set; }
 
         public IEnumerable<GraphQLInterfaceType> Interfaces => _interfaces;
@@ -26,13 +21,10 @@ namespace GraphQL.Next.Configs
         }
     }
 
-    public class GraphQLObjectTypeConfig<T> : GraphQLTypeFieldConfig<T>, IGraphQLObjectTypeConfig
+    public class GraphQLObjectTypeConfig<T> : GraphQLComplexTypeConfig<T>, IGraphQLObjectTypeConfig
     {
         private readonly List<GraphQLInterfaceType> _interfaces = new List<GraphQLInterfaceType>();
 
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string DeprecationReason { get; set; }
         public Func<object, bool> IsOfType { get; set; }
 
         public IEnumerable<GraphQLInterfaceType> Interfaces => _interfaces;

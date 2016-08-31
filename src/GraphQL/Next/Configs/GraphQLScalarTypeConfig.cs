@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace GraphQL.Next.Configs
 {
-    public class GraphQLScalarTypeConfig
+    public class GraphQLScalarTypeConfig : GraphQLTypeConfig
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string DeprecationReason { get; set; }
         public Func<object, object> Serialize { get; set; }
         public Func<object, object> ParseValue { get; set; }
         public Func<IValue, object> ParseLiteral { get; set; }

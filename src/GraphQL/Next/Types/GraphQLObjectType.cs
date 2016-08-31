@@ -1,4 +1,5 @@
-﻿using GraphQL.Next.Configs;
+﻿using GraphQL.Next.Builders;
+using GraphQL.Next.Configs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,6 @@ namespace GraphQL.Next.Types
 {
     public interface IGraphQLObjectTypeConfig : IGraphQLComplexTypeConfig
     {
-        string DeprecationReason { get; set; }
         Func<object, bool> IsOfType { get; set; }
         IEnumerable<GraphQLInterfaceType> Interfaces { get; }
         void Interface(params GraphQLInterfaceType[] interfaces);
@@ -20,6 +20,7 @@ namespace GraphQL.Next.Types
     {
         private readonly Dictionary<string, GraphQLFieldDefinition> _fields =
             new Dictionary<string, GraphQLFieldDefinition>(StringComparer.OrdinalIgnoreCase);
+
         private readonly List<GraphQLInterfaceType> _interfaces = new List<GraphQLInterfaceType>();
 
         public GraphQLObjectType()
@@ -86,30 +87,28 @@ namespace GraphQL.Next.Types
             }
         }
 
-        public static GraphQLObjectType For(Action<GraphQLObjectTypeConfig> configure)
+        public static GraphQLObjectType For(Action<ObjectTypeBuilder<object>> configure)
         {
-            var config = new GraphQLObjectTypeConfig();
-            configure(config);
-            return new GraphQLObjectType(config);
+            var builder = new ObjectTypeBuilder<object>(new GraphQLObjectTypeConfig());
+            configure(builder);
+            return new GraphQLObjectType(builder.Resolve());
         }
     }
 
     public class GraphQLObjectType<TModel> : GraphQLObjectType
     {
-        public GraphQLObjectType()
-        {
-        }
+        public GraphQLObjectType() {}
 
-        public GraphQLObjectType(GraphQLObjectTypeConfig<TModel> config)
+        public GraphQLObjectType(GraphQLObjectTypeConfig config)
             : base(config)
         {
         }
 
-        public static GraphQLObjectType<TModel> For(Action<GraphQLObjectTypeConfig<TModel>> configure)
+        public static GraphQLObjectType<TModel> For(Action<ObjectTypeBuilder<TModel>> configure)
         {
             var type = typeof(TModel);
 
-            var config = new GraphQLObjectTypeConfig<TModel>();
+            var builder = new ObjectTypeBuilder<TModel>(new GraphQLObjectTypeConfig());
             var name = type.Name;
 
             if (type.IsInterface && name.StartsWith("I"))
@@ -117,10 +116,10 @@ namespace GraphQL.Next.Types
                 name = name.Substring(1);
             }
 
-            config.Name = name;
+            builder.Name(name);
 
-            configure(config);
-            return new GraphQLObjectType<TModel>(config);
+            configure(builder);
+            return new GraphQLObjectType<TModel>(builder.Resolve());
         }
     }
 }

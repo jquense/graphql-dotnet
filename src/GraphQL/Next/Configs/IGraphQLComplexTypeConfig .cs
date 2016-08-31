@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GraphQL.Next.Configs
 {
-    public interface IGraphQLComplexTypeConfig : IGraphQLFieldConfig
+    public interface IGraphQLComplexTypeConfig : IGraphQLTypeConfig
     {
         IEnumerable<GraphQLFieldDefinition> Fields { get; }
     }

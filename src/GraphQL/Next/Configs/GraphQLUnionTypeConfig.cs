@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace GraphQL.Next.Configs
 {
-    public class GraphQLUnionTypeConfig : IGraphQLAbstractTypeConfig
+    public class GraphQLUnionTypeConfig : GraphQLTypeConfig, IGraphQLAbstractTypeConfig
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
         public Func<object, GraphQLType> ResolveType { get; set; }
         public GraphQLObjectType[] Types { get; set; }
     }

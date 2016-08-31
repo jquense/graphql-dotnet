@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GraphQL.Next.Configs
 {
-    public interface IGraphQLAbstractTypeConfig : IGraphQLFieldConfig
+    public interface IGraphQLAbstractTypeConfig : IGraphQLTypeConfig
     {
         Func<object, GraphQLType> ResolveType { get; set; }
     }

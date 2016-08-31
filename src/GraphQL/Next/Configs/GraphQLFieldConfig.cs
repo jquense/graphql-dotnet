@@ -16,4 +16,13 @@ namespace GraphQL.Next.Configs
         public IGraphQLOutputType Type { get; set; }
         public IFieldResolver Resolve { get; set; }
     }
+
+    //public class GraphQLFieldConfig<T> : GraphQLArgumentConfig, IGraphQLFieldConfig
+    //{
+    //    public string Name { get; set; }
+    //    public string Description { get; set; }
+    //    public string DeprecationReason { get; set; }
+    //    public IGraphQLOutputType Type { get; set; }
+    //    public IFieldResolver<T> Resolve { get; set; }
+    //}
 }
