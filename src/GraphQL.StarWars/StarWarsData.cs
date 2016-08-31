@@ -5,7 +5,20 @@ using GraphQL.StarWars.Types;
 
 namespace GraphQL.StarWars
 {
-    public class StarWarsData
+    public interface IStarWarsData
+    {
+        Task<Human> GetHumanByIdAsync(string id);
+
+        Task<Droid> GetDroidByIdAsync(string id);
+
+        IEnumerable<ICharacter> FriendsFor(string id);
+        IEnumerable<ICharacter> FriendsFor(ICharacter character);
+
+        Task<IEnumerable<ICharacter>> FriendsForAsync(string id);
+        Task<IEnumerable<ICharacter>> FriendsForAsync(ICharacter character);
+    }
+
+    public class StarWarsData : IStarWarsData
     {
         private readonly List<Human> _humans = new List<Human>();
         private readonly List<Droid> _droids = new List<Droid>();
@@ -41,14 +54,27 @@ namespace GraphQL.StarWars
             });
         }
 
-        public IEnumerable<StarWarsCharacter> GetFriends(StarWarsCharacter character)
+        public IEnumerable<ICharacter> FriendsFor(string id)
+        {
+            if (id == null)
+            {
+                return null;
+            }
+
+            return FriendsFor(
+                (ICharacter)_humans.FirstOrDefault(h => h.Id == id) ??
+                (ICharacter)_droids.FirstOrDefault(d => d.Id == id)
+            );
+        }
+
+        public IEnumerable<ICharacter> FriendsFor(ICharacter character)
         {
             if (character == null)
             {
                 return null;
             }
 
-            var friends = new List<StarWarsCharacter>();
+            var friends = new List<ICharacter>();
             var lookup = character.Friends;
             if (lookup != null)
             {
@@ -56,6 +82,16 @@ namespace GraphQL.StarWars
                 _droids.Where(d => lookup.Contains(d.Id)).Apply(friends.Add);
             }
             return friends;
+        }
+
+        public Task<IEnumerable<ICharacter>> FriendsForAsync(string id)
+        {
+            return Task.FromResult(FriendsFor(id));
+        }
+
+        public Task<IEnumerable<ICharacter>> FriendsForAsync(ICharacter character)
+        {
+            return Task.FromResult(FriendsFor(character));
         }
 
         public Task<Human> GetHumanByIdAsync(string id)

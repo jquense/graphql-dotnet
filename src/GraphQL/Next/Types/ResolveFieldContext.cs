@@ -3,7 +3,7 @@ using GraphQL.Language;
 using System.Threading;
 using GraphQL.Language.AST;
 
-namespace GraphQL.Types
+namespace GraphQL.Next.Types
 {
     public class ResolveFieldContext<TSource>
     {

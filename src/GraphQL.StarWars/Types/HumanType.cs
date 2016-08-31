@@ -12,7 +12,7 @@ namespace GraphQL.StarWars.Types
             Field<StringGraphType>("name", "The name of the human.");
             Field<ListGraphType<CharacterInterface>>(
                 "friends",
-                resolve: context => data.GetFriends(context.Source as StarWarsCharacter)
+                resolve: context => data.FriendsFor(context.Source as StarWarsCharacter)
             );
             Field<ListGraphType<EpisodeEnum>>("appearsIn", "Which movie they appear in.");
             Field<StringGraphType>("homePlanet", "The home planet of the human.");

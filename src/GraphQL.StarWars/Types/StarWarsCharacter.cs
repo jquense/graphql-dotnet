@@ -1,6 +1,13 @@
 namespace GraphQL.StarWars.Types
 {
-    public abstract class StarWarsCharacter
+    public interface ICharacter
+    {
+        string Id { get; set; }
+        string Name { get; set; }
+        string[] Friends { get; set; }
+    }
+
+    public abstract class StarWarsCharacter : ICharacter
     {
         public string Id { get; set; }
         public string Name { get; set; }
