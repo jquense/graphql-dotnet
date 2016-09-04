@@ -3,8 +3,15 @@ using System;
 
 namespace GraphQL.Types
 {
+    public interface IOutputType
+    {
+    }
 
-    public interface IFieldType: IHaveDefaultValue
+    public interface IInputType
+    {
+    }
+
+    public interface ITypeDefinition : IHaveDefaultValue
     {
         string Name { get; }
 
