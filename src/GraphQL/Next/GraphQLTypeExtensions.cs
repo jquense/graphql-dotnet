@@ -10,6 +10,17 @@ namespace GraphQL.Next
 {
     public static class GraphQLExtensions
     {
+        public static string GetTypeNameFromType(this Type type)
+        {
+            var name = type.Name;
+
+            if (type.IsInterface && name.StartsWith("I"))
+            {
+                name = name.Substring(1);
+            }
+
+            return name;
+        }
 
         public static IGraphQLType GetGraphQLTypeFromType(this Type type)
         {

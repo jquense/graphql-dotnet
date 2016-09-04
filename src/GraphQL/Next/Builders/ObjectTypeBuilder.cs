@@ -1,6 +1,7 @@
 ﻿using System;
 using GraphQL.Next.Configs;
 using GraphQL.Next.Types;
+using System.Linq;
 using System.Linq.Expressions;
 using GraphQL.Next.Resolvers;
 using GraphQL.Next.Builders;

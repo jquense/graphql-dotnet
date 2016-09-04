@@ -10,6 +10,6 @@ namespace GraphQL.Next.Configs
     public class GraphQLUnionTypeConfig : GraphQLTypeConfig, IGraphQLAbstractTypeConfig
     {
         public Func<object, GraphQLType> ResolveType { get; set; }
-        public GraphQLObjectType[] Types { get; set; }
+        public IList<IGraphQLType> Types { get; set; }
     }
 }

@@ -15,10 +15,12 @@ namespace GraphQL.Next.Configs
     public class GraphQLInterfaceTypeConfig : GraphQLComplexTypeConfig, IGraphQLInterfaceTypeConfig
     {
         public Func<object, GraphQLType> ResolveType { get; set; }
+        public IList<IGraphQLType> Types { get; set; }
     }
 
     public class GraphQLInterfaceTypeConfig<TModel> : GraphQLComplexTypeConfig<TModel>, IGraphQLInterfaceTypeConfig
     {
         public Func<object, GraphQLType> ResolveType { get; set; }
+        public IList<IGraphQLType> Types { get; set; }
     }
 }

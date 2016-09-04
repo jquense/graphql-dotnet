@@ -6,31 +6,41 @@ using System.Threading.Tasks;
 
 namespace GraphQL.Next.Types
 {
+    public class GraphQLString : GraphQLScalarType<string>
+    {
+        public GraphQLString() : base ("String") {}
+    }
+
+    public class GraphQLInt : GraphQLScalarType<int>
+    {
+        public GraphQLInt() : base("Int") { }
+    }
+
+    public class GraphQLFloat : GraphQLScalarType<double>
+    {
+        public GraphQLFloat() : base("Float") { }
+    }
+
+    public class GraphQLBoolean : GraphQLScalarType<bool>
+    {
+        public GraphQLBoolean() : base("Boolean") { }
+    }
+
+    public class GraphQLID : GraphQLScalarType<string>
+    {
+        public GraphQLID() : base("ID") { }
+    }
+
     public static class GraphQLScalarTypes
     {
-        public static GraphQLScalarType GraphQLInt = GraphQLScalarType.For(_ =>
-        {
-            _.Name = "Int";
-        });
+        public static GraphQLInt GraphQLInt = new GraphQLInt();
 
-        public static GraphQLScalarType<double> GraphQLFloat = GraphQLScalarType<double>.For(_ =>
-        {
-            _.Name = "Float";
-        });
+        public static GraphQLFloat GraphQLFloat = new GraphQLFloat();
 
-        public static GraphQLScalarType<string> GraphQLString = GraphQLScalarType<string>.For(_ =>
-        {
-            _.Name = "String";
-        });
+        public static GraphQLString GraphQLString = new GraphQLString();
 
-        public static GraphQLScalarType<bool> GraphQLBoolean = GraphQLScalarType<bool>.For(_ =>
-        {
-            _.Name = "Boolean";
-        });
+        public static GraphQLBoolean GraphQLBoolean = new GraphQLBoolean();
 
-        public static GraphQLScalarType GraphQLID = GraphQLScalarType.For(_ =>
-        {
-            _.Name = "ID";
-        });
+        public static GraphQLID GraphQLID = new GraphQLID();
     }
 }

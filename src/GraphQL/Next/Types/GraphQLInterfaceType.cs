@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GraphQL.Next.Builders;
 
 namespace GraphQL.Next.Types
 {
@@ -38,37 +39,16 @@ namespace GraphQL.Next.Types
             Fields = config.Fields;
         }
 
-        public static GraphQLInterfaceType For(Action<GraphQLInterfaceTypeConfig> configure)
+        public static GraphQLInterfaceType For<TSourceType>(Action<InterfaceBuilder<TSourceType>> configure)
         {
-            var config = new GraphQLInterfaceTypeConfig();
-            configure(config);
-            return new GraphQLInterfaceType(config);
-        }
-    }
-
-    public class GraphQLInterfaceType<TModel> : GraphQLInterfaceType
-    {
-        public GraphQLInterfaceType(GraphQLInterfaceTypeConfig<TModel> config)
-            : base(config)
-        {
-        }
-
-        public static GraphQLInterfaceType<TModel> For(Action<GraphQLInterfaceTypeConfig<TModel>> configure)
-        {
-            var type = typeof(TModel);
-
-            var config = new GraphQLInterfaceTypeConfig<TModel>();
-            var name = type.Name;
-
-            if (type.IsInterface && name.StartsWith("I"))
+            var builder = new InterfaceBuilder<TSourceType>(new GraphQLInterfaceTypeConfig()
             {
-                name = name.Substring(1);
-            }
+                Name = typeof(TSourceType).GetTypeNameFromType()
+            });
 
-            config.Name = name;
+            configure(builder);
 
-            configure(config);
-            return new GraphQLInterfaceType<TModel>(config);
+            return new GraphQLInterfaceType(builder.Resolve());
         }
     }
 }

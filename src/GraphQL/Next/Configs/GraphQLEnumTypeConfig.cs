@@ -36,7 +36,7 @@ namespace GraphQL.Next.Configs
 
         public IEnumerable<EnumValueDefinition> Values => _values;
 
-        protected void AddValue(EnumValueDefinition definition)
+        public void AddValue(EnumValueDefinition definition)
         {
             _values.Add(definition);
         }

@@ -9,21 +9,10 @@ namespace GraphQL.Next.Types
 {
     public class GraphQLAbstractType : GraphQLType, IGraphQLOutputType
     {
-        private readonly List<IGraphQLType> _types = new List<IGraphQLType>();
+        // TODO: needs to be public?
+        public IList<IGraphQLType> Types => ((IGraphQLAbstractTypeConfig) TypeConfig).Types;
 
-        internal GraphQLAbstractType()
-        {
-        }
-
-        public string Description { get; set; }
-
-        public IEnumerable<IGraphQLType> Types => _types;
-
-        protected void Initialize(IGraphQLAbstractTypeConfig config)
-        {
-            Name = config.Name;
-            Description = config.Description;
-        }
+        internal GraphQLAbstractType(IGraphQLAbstractTypeConfig config) : base(config){}
 
         public bool IsPossibleType(IGraphQLType type)
         {
@@ -32,7 +21,7 @@ namespace GraphQL.Next.Types
 
         public void AddTypes(params IGraphQLType[] types)
         {
-            _types.Fill(types);
+            TypeConfig.As<IGraphQLAbstractTypeConfig>().Types.Fill(types);
         }
     }
 }

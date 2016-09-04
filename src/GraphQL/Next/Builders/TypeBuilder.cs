@@ -13,6 +13,10 @@ namespace GraphQL.Next.Builders
     {
         protected readonly TConfigType _config;
 
+        private GraphQLTypeReference _reference;
+
+        public GraphQLTypeReference Self => _reference;
+
         public TypeBuilder(TConfigType config)
         {
             _config = config;
@@ -21,6 +25,8 @@ namespace GraphQL.Next.Builders
         public TSelf Name(string name)
         {
             _config.Name = name;
+            _reference = new GraphQLTypeReference(name);
+
             return (TSelf)this;
         }
 
@@ -36,7 +42,7 @@ namespace GraphQL.Next.Builders
             return (TSelf)this;
         }
 
-        public TConfigType Resolve()
+        public virtual TConfigType Resolve()
         {
             return _config;
         }
@@ -47,7 +53,7 @@ namespace GraphQL.Next.Builders
             where TConfigType : GraphQLComplexTypeConfig
             where TSelf : ComplexTypeBuilder<TSourceType, TConfigType, TSelf>
     {
-        public ComplexTypeBuilder(TConfigType config) : 
+        public ComplexTypeBuilder(TConfigType config) :
             base(config)
         {
         }
@@ -70,6 +76,15 @@ namespace GraphQL.Next.Builders
             return (TSelf)this;
         }
 
+        /// <summary>
+        /// Create a new Field for this GraphQlType
+        /// </summary>
+        /// <param name="name">Field name</param>
+        /// <param name="type">The GraphQL type of the field</param>
+        /// <param name="description"></param>
+        /// <param name="deprecatedReason"></param>
+        /// <param name="resolve"></param>
+        /// <returns></returns>
         public TSelf Field(
             string name,
             IGraphQLOutputType type,
@@ -77,7 +92,7 @@ namespace GraphQL.Next.Builders
             string deprecatedReason = null,
             Func<ResolveFieldContext<TSourceType>, object> resolve = null)
         {
-            return Field(name, type, description,deprecatedReason, new FuncFieldResolver<TSourceType, object>(resolve));
+            return Field(name, type, description, deprecatedReason, new FuncFieldResolver<TSourceType, object>(resolve));
         }
 
 
@@ -100,7 +115,7 @@ namespace GraphQL.Next.Builders
 
             args?.Invoke(argConfig);
 
-            return Field(name, outputType, description, deprecatedReason, 
+            return Field(name, outputType, description, deprecatedReason,
                 new ExpressionFieldResolver<TSourceType, TProperty>(resolve));
         }
 
@@ -121,6 +136,16 @@ namespace GraphQL.Next.Builders
 
             _config.AddField(builder.Resolve());
             return (TSelf)this;
+        }
+    }
+
+    public class ComplexTypeBuilder<TSourceType, TConfigType> 
+        : ComplexTypeBuilder<TSourceType, TConfigType, ComplexTypeBuilder<TSourceType, TConfigType>>
+        where TConfigType : GraphQLComplexTypeConfig
+    {
+        public ComplexTypeBuilder(TConfigType config) :
+            base(config)
+        {
         }
     }
 }

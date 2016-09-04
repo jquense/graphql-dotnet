@@ -1,4 +1,5 @@
 ﻿using GraphQL.Next.Configs;
+using GraphQL.Next.Builders;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,17 +15,24 @@ namespace GraphQL.Next.Types
     {
         private readonly List<EnumValueDefinition> _values = new List<EnumValueDefinition>();
 
-        public GraphQLEnumType(GraphQLEnumTypeConfig config)
-            : base(config)
-        {
-            _values.AddRange(config.Values);
-        }
+        //public GraphQLEnumType(GraphQLEnumTypeConfig config)
+        //    : base(config)
+        //{
+        //    _values.AddRange(config.Values);
+        //}
 
         public IEnumerable<EnumValueDefinition> Values => _values;
 
-        public static GraphQLEnumType For<T>(Action<GraphQLEnumTypeConfig<T>> configure)
+        public GraphQLEnumType For<T>(Action<GraphQLEnumTypeConfig<T>> configure)
         {
             var config = new GraphQLEnumTypeConfig<T>();
+            configure(config);
+            return new GraphQLEnumType(config);
+        }
+
+        public static GraphQLEnumType For<T>(Action<EnumBuilder<T>> configure)
+        {
+            var config = new EnumBuilder<T>(TypeConfig);
             configure(config);
             return new GraphQLEnumType(config);
         }

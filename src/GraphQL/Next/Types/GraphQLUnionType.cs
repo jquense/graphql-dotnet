@@ -9,19 +9,9 @@ namespace GraphQL.Next.Types
 {
     public class GraphQLUnionType : GraphQLAbstractType
     {
-        public GraphQLUnionType()
-        {
-        }
 
-        public GraphQLUnionType(GraphQLUnionTypeConfig config)
+        public GraphQLUnionType(GraphQLUnionTypeConfig config) : base(config)
         {
-            Initialize(config);
-        }
-
-        public void Initialize(GraphQLUnionTypeConfig config)
-        {
-            base.Initialize(config);
-            AddTypes(config.Types);
         }
 
         public static GraphQLUnionType For(Action<GraphQLUnionTypeConfig> configure)
@@ -29,6 +19,15 @@ namespace GraphQL.Next.Types
             var config = new GraphQLUnionTypeConfig();
             configure(config);
             return new GraphQLUnionType(config);
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            Invariant.Check(
+                Types != null && Types.Any(),
+                $"{Name} has no possible types configured.");
         }
     }
 }

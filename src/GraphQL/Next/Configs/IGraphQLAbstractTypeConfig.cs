@@ -9,6 +9,7 @@ namespace GraphQL.Next.Configs
 {
     public interface IGraphQLAbstractTypeConfig : IGraphQLTypeConfig
     {
+        IList<IGraphQLType> Types { get; }
         Func<object, GraphQLType> ResolveType { get; set; }
     }
 }

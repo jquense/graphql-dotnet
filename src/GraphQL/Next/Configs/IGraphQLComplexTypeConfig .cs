@@ -9,6 +9,6 @@ namespace GraphQL.Next.Configs
 {
     public interface IGraphQLComplexTypeConfig : IGraphQLTypeConfig
     {
-        IEnumerable<GraphQLFieldDefinition> Fields { get; }
+        Dictionary<string, GraphQLFieldDefinition> Fields { get; }
     }
 }
