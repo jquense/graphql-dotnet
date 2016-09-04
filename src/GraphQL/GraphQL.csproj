@@ -55,8 +55,14 @@
     </Compile>
     <Compile Include="Builders\ConnectionBuilder.cs" />
     <Compile Include="Builders\FieldBuilder.cs" />
+    <Compile Include="Next\Builders\ArgumentBuilder.cs" />
+    <Compile Include="Next\Builders\IBuilder.cs" />
+    <Compile Include="Next\Builders\EnumBuilder.cs" />
+    <Compile Include="Next\Builders\InterfaceBuilder.cs" />
+    <Compile Include="Next\Builders\ObjectTypeBuilder.cs" />
+    <Compile Include="Next\Builders\TypeBuilder.cs" />
+    <Compile Include="Next\Builders\FieldBuilder.cs" />
     <Compile Include="FuncFieldResolver.cs" />
-    <Compile Include="GraphQLUsage.cs" />
     <Compile Include="LightweightCache.cs" />
     <Compile Include="Execution\GraphQLDocumentBuilder.cs" />
     <Compile Include="Invariant.cs" />
@@ -65,9 +71,11 @@
     <Compile Include="Language\CoreToVanillaConverter.cs" />
     <Compile Include="Language\NodeExtensions.cs" />
     <Compile Include="Builders\ResolveConnectionContext.cs" />
+    <Compile Include="Next\Builders\ArgumentsBuilder.cs" />
     <Compile Include="Next\Configs\GraphQLArgumentConfig.cs" />
     <Compile Include="Next\Configs\GraphQLEngineConfig.cs" />
     <Compile Include="Next\Configs\GraphQLEnumTypeConfig.cs" />
+    <Compile Include="Next\Configs\GraphQLTypeConfig.cs" />
     <Compile Include="Next\Configs\IGraphQLComplexTypeConfig .cs" />
     <Compile Include="Next\Configs\IGraphQLAbstractTypeConfig.cs" />
     <Compile Include="Next\Configs\IGraphQLFieldConfig.cs" />
@@ -76,7 +84,7 @@
     <Compile Include="Next\Configs\GraphQLInterfaceTypeConfig.cs" />
     <Compile Include="Next\Configs\GraphQLObjectTypeConfig.cs" />
     <Compile Include="Next\Configs\GraphQLScalarTypeConfig.cs" />
-    <Compile Include="Next\Configs\GraphQLTypeFieldConfig.cs" />
+    <Compile Include="Next\Configs\GraphQLComplexTypeConfig.cs" />
     <Compile Include="Next\Configs\GraphQLUnionTypeConfig.cs" />
     <Compile Include="Next\Types\GraphQLDirective.cs" />
     <Compile Include="Next\Types\GraphQLEngine.cs" />

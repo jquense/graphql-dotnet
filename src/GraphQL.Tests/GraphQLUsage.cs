@@ -90,6 +90,9 @@ namespace GraphQL.StarWars
                 _.Field(f => f
                     .Name("human")
                     .Type(new GraphQLList(humanType))
+                    //.Argument<GraphQLString>(args => args
+                    //    .Name("id")
+                    //    .Description("Id of the human."))
                     .Resolve(context => 
                         data.GetHumanByIdAsync(context.GetArgument<string>("id"))
                     )
