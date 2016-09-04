@@ -63,6 +63,11 @@
     <Compile Include="Language\CoreToVanillaConverter.cs" />
     <Compile Include="Language\NodeExtensions.cs" />
     <Compile Include="Builders\ResolveConnectionContext.cs" />
+    <Compile Include="Resolvers\ExpressionFieldResolver.cs" />
+    <Compile Include="Resolvers\FuncFieldResolver.cs" />
+    <Compile Include="Resolvers\IFieldResolver.cs" />
+    <Compile Include="Types\IComplexFieldType.cs" />
+    <Compile Include="Types\IFieldType.cs" />
     <Compile Include="Utilities\StringUtils.cs" />
     <Compile Include="Execution\ExecutionResultJsonConverter.cs" />
     <Compile Include="Execution\ResolveFieldResult.cs" />
